@@ -15,8 +15,7 @@ in {
 
     config = {
       modifier = mod;
-      # terminal = "${pkgs.kitty}/bin/kitty";
-      terminal = "${pkgs.kitty}/bin/kitty";
+      terminal = "${pkgs.ghostty}/bin/ghostty";
       fonts = {
         names = ["Noto Sans"];
         size = 9.0;
@@ -89,7 +88,7 @@ in {
         "XF86MonBrightnessUp" = "exec brightnessctl set 4%+";
 
         # Application keybindings
-        "${mod}+Return" = "exec ${pkgs.kitty}/bin/kitty";
+        "${mod}+Return" = "exec ${pkgs.ghostty}/bin/ghostty";
         "${mod}+Shift+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
         "${mod}+s" = "exec flameshot gui --clipboard --path ${home}/iCloud/screenshots/";
         "Print" = "exec flameshot screen --clipboard --path ${home}/iCloud/screenshots/";
@@ -155,8 +154,8 @@ in {
         "${mod}+Shift+e" = ''exec "${pkgs.i3}/bin/i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' '${pkgs.i3}/bin/i3-msg exit'"'';
         "${mod}+r" = ''mode "resize"'';
 
-        "${mod}+Shift+n" = "exec kitty --title notetaker_window --config ${home}/.config/kitty/config/notetaker.conf ${local_bin}/notetaker";
-        "${mod}+Shift+m" = "exec kitty --title floatimage_window ${local_bin}/floatimage";
+        "${mod}+Shift+n" = "exec ${pkgs.ghostty}/bin/ghostty --title=notetaker_window --config-file=${home}/.config/ghostty/notetaker.conf -e ${local_bin}/notetaker";
+        "${mod}+Shift+m" = "exec ${pkgs.ghostty}/bin/ghostty --title=floatimage_window -e ${local_bin}/floatimage";
         "${mod}+ g" = "exec --no-startup-id ${local_bin}/google-search.sh";
         "${mod}+ Shift + g" = "exec --no-startup-id ${local_bin}/nixpkg-search.sh";
       };

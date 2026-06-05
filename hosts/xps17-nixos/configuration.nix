@@ -395,7 +395,7 @@
     discord
     # gimp
     # mullvad
-    kitty
+    ghostty
     mpv
     code-cursor
     anki

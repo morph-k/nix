@@ -25,6 +25,7 @@
     variables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
+      TERMINAL = "ghostty";
     };
     systemPackages = with pkgs; [
       git
@@ -74,6 +75,7 @@
       # "aerospace"
       # "alt-tab"
       # "deskflow"
+      "ghostty"
       "hiddenbar"
       "karabiner-elements"
       "keycastr"
@@ -101,15 +103,7 @@
     allowUnsupportedSystem = true;
   };
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      kitty = prev.kitty.overrideAttrs (old: {
-        version = "0.43.1";
-        __intentionallyOverridingVersion = true;
-        doCheck = false;
-      });
-    })
-  ];
+  nixpkgs.overlays = [];
 
   # Enable SSH via macOS Remote Login (sshd)
   services.openssh = {

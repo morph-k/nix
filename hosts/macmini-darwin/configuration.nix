@@ -153,15 +153,7 @@
     # ];
   };
 
-  # nixpkgs.overlays = [
-  # (final: prev: {
-  # kitty = prev.kitty.overrideAttrs (old: {
-  # version = "0.43.1";
-  # __intentionallyOverridingVersion = true;
-  # doCheck = false;
-  # });
-  # })
-  # ];
+  nixpkgs.overlays = [];
 
   # Kanata key remapper (cross-platform, migrated from keyd)
   services.kanata-remapper = {

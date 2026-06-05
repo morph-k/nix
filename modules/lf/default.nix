@@ -198,14 +198,16 @@ in {
         y=$5
 
         if [[ "$( ${pkgs.file}/bin/file -Lb --mime-type "$file")" =~ ^image ]]; then
-            ${pkgs.kitty}/bin/kitty +kitten icat --silent --stdin no --transfer-mode file --place "''${w}x''${h}@''${x}x''${y}" "$file" < /dev/null > /dev/tty
+            # ghostty speaks the kitty graphics protocol; chafa emits it (no kitten icat CLI in ghostty)
+            ${pkgs.chafa}/bin/chafa -f kitty --polite on -s "''${w}x''${h}" "$file" < /dev/null > /dev/tty
             exit 1
         fi
 
         ${pkgs.pistol}/bin/pistol "$file"
       '';
       cleaner = pkgs.writeShellScriptBin "clean.sh" ''
-        ${pkgs.kitty}/bin/kitty +kitten icat --clear --stdin no --silent --transfer-mode file < /dev/null > /dev/tty
+        # delete all images placed via the kitty graphics protocol
+        printf '\033_Ga=d\033\\' > /dev/tty
       '';
     in ''
       set cleaner ${cleaner}/bin/clean.sh

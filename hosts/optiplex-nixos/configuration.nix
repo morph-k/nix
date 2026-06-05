@@ -343,7 +343,7 @@
     tmux
     starship
     # atuin
-    kitty
+    ghostty
     ranger
     eza
     autojump

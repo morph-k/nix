@@ -16,7 +16,7 @@ cp "$I3_CONFIG" "$SWAY_CONFIG_DIR/config"
 sed -i 's/exec_always sxhkd/# exec_always sxhkd  # Removed: X11-only, use Sway bindings instead/g' "$SWAY_CONFIG_DIR/config"
 sed -i 's/exec --no-startup-id picom -CGb/# exec --no-startup-id picom  # Removed: X11 compositor, Sway has built-in compositing/g' "$SWAY_CONFIG_DIR/config"
 sed -i 's/xbacklight/brightnessctl set/g' "$SWAY_CONFIG_DIR/config"
-sed -i 's/i3-sensible-terminal/kitty/g' "$SWAY_CONFIG_DIR/config"
+sed -i 's/i3-sensible-terminal/ghostty/g' "$SWAY_CONFIG_DIR/config"
 
 # Add Sway-specific configuration at the end
 cat >> "$SWAY_CONFIG_DIR/config" << 'EOF'

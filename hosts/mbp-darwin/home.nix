@@ -67,7 +67,6 @@
       coreutils
       tmux
       abduco
-      kitty
       entr
       cmake
       meson

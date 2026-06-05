@@ -39,7 +39,7 @@
       mako
 
       # Terminal (if not already installed)
-      kitty
+      ghostty
 
       # Network manager applet for Wayland
       networkmanagerapplet

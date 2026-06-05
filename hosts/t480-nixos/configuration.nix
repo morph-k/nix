@@ -288,7 +288,7 @@
     libtool
     libvterm
     os-prober
-    kitty
+    ghostty
     age
     rage
     uxplay
