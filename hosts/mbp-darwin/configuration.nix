@@ -81,7 +81,9 @@
       "keycastr"
       "raycast"
       "spotify"
+      "ghostty"
       "utm"
+      "secretive"
     ];
   };
 
@@ -134,6 +136,12 @@
     enable = false;
     package = pkgs.emacs;
     socketActivation = false;
+  };
+
+  # Touch ID for sudo (incl. inside tmux via pam_reattach)
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true;
   };
 
   system = {

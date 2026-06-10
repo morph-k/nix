@@ -1,6 +1,7 @@
 *~
 *.swp
 *.swo
+*.vim
 result
 .build-stamp
 .DS_Store
