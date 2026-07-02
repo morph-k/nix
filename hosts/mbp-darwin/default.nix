@@ -15,6 +15,7 @@ darwin.lib.darwinSystem {
   modules = [
     agenix.darwinModules.default
     ./configuration.nix
+    ../../modules/ssh-hardened-darwin.nix
     # ./restic.nix
     {
       environment.systemPackages = with nixpkgs.legacyPackages.aarch64-darwin; [

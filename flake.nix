@@ -35,10 +35,11 @@
     };
     tailscale = {
       url = "github:tailscale/tailscale";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixified-ai = {
       url = "github:nixified-ai/flake";
@@ -48,7 +49,7 @@
       flake = false;
     };
     rawtalk = {
-      url = "github:morphykuffour/rawtalk";
+      url = "github:morph-k/rawtalk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agtx = {

@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   imports = [
+    ../../modules/home-common.nix
     ../../modules/lf
     ../../modules/zathura
     ../../modules/hammerspoon.nix
@@ -8,6 +9,87 @@
   programs = {
     home-manager = {
       enable = true;
+    };
+
+    # mcfly (Ctrl-R history): package + options managed here. The `mcfly init zsh`
+    # hook stays in the stowed ~/.zshrc since zsh isn't a home-manager program.
+    mcfly = {
+      enable = true;
+      keyScheme = "vim";
+      enableZshIntegration = false;
+    };
+
+    # Emacs with packages - config is stowed from ~/dots/emacs
+    emacs = {
+      enable = true;
+      package = pkgs.emacs30.override {
+        withNativeCompilation = true;
+      };
+      extraPackages = epkgs:
+        with epkgs; [
+          # Core
+          use-package
+          gcmh
+
+          # Evil ecosystem
+          evil
+          evil-collection
+          evil-org
+          evil-commentary
+          undo-tree
+
+          # Completion
+          counsel
+          counsel-tramp
+          ivy
+          swiper
+          flx
+
+          # Git
+          magit
+          magit-delta
+          git-commit
+          magit-section
+          with-editor
+          git-timemachine
+
+          # Org ecosystem
+          org-roam
+          org-roam-ui
+          org-msg
+
+          # Terminal
+          vterm
+          multi-vterm
+          eat
+
+          # UI/UX
+          which-key
+          rainbow-delimiters
+          olivetti
+          deadgrep
+          circadian
+          autothemer
+          gruvbox-theme
+          modus-themes
+
+          # Dired
+          dired-hide-dotfiles
+          nerd-icons-dired
+          nerd-icons
+          async
+
+          # Editing
+          yasnippet
+          markdown-mode
+          nix-mode
+          slime
+          pdf-tools
+
+          # Utilities
+          exec-path-from-shell
+          atomic-chrome
+        ];
     };
 
     # neovim = {
@@ -28,45 +110,25 @@
     };
 
     packages = with pkgs; [
+      # NOTE: CLI tools common to all hosts live in modules/home-common.nix.
+
       # Archive/compression
-      p7zip
       unar
       xz
       zstd
 
-      # Shell & navigation
-      autojump
-      starship
-      zsh
-      atuin
-      mcfly
-
       # File tools
-      ripgrep
-      fd
-      fzf
-      eza
-      bat
       tree
-      edir
       rename
       fswatch
       watchexec
 
-      # Git & version control
-      gh
-      delta
-
       # Text/document processing
-      pandoc
-      jq
       glow
       gum
 
       # Development tools
       coreutils
-      tmux
-      abduco
       entr
       cmake
       meson
@@ -75,17 +137,14 @@
       moreutils
 
       # Languages & runtimes
-      go
       lua
       luarocks
       nodejs
-      ruby
 
       # Python tools
       pipx
       poetry
       uv
-      jupyter
 
       # System monitoring
       btop
@@ -103,22 +162,20 @@
       mupdf
 
       # Network & communication
-      curl
       wget
       aria2
       socat
-      croc
       qrcp
 
       # Email tools
-      neomutt
-      isync
       notmuch
       msmtp
 
       # Security & encryption
       age
       rage
+      age-plugin-yubikey # PIV/age identities held on a YubiKey (agenix recipient)
+      yubikey-manager # `ykman` for managing the YubiKey
 
       # Nix tools
       deadnix
@@ -126,10 +183,7 @@
 
       # Other utilities
       stow
-      tealdeer
       todoist
-      ranger
-      stylua
       cscope
       minicom
     ];

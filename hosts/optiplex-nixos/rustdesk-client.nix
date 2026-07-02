@@ -109,8 +109,8 @@ in {
     dbus # For dbus-launch
   ];
 
-  # Force GDM to use X11 instead of Wayland
-  services.displayManager.gdm.wayland = false;
+  # NOTE: services.displayManager.gdm.wayland was removed — it no longer has
+  # any effect under GNOME 50 (nixpkgs asserts on it).
 
   # Auto-login for morph user to have an active session
   services.displayManager.autoLogin = {

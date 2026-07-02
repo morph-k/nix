@@ -10,6 +10,7 @@
   ...
 }: {
   imports = [
+    ../../modules/home-common.nix
     # ../../modules/i3.nix  # Disabled for XFCE
     ../../modules/pass.nix
     ../../modules/fonts.nix
@@ -27,6 +28,14 @@
   programs = {
     home-manager = {
       enable = true;
+    };
+
+    # mcfly (Ctrl-R history): package + options managed here. The `mcfly init zsh`
+    # hook stays in the stowed ~/.zshrc since zsh isn't a home-manager program.
+    mcfly = {
+      enable = true;
+      keyScheme = "vim";
+      enableZshIntegration = false;
     };
     morphEmacs = {
       enable = true;
@@ -83,51 +92,25 @@
     homeDirectory = "/home/morph";
     stateVersion = "22.05";
     packages = with pkgs; [
+      # NOTE: CLI tools common to all hosts live in modules/home-common.nix.
       # i3status-rust  # Disabled for XFCE
-      tmux
-      abduco
-      zsh
-      starship
-      eza
-      bat
-      tealdeer
-      fd
-      gh
       clipmenu
-      delta
       deadnix
       statix
-      jupyter
-      ruby
-      edir
-      ranger
-      stylua
       cargo
-      jq
-      curl
-      fzf
       sbcl
-      neomutt
       mu
-      isync
       # msmtp
       pass
       eva
-      mcfly
       hexyl
-      ripgrep
-      autojump
-      pandoc
-      croc
       zathura
-      go
       feh
       tree-sitter
       # nodePackages.insect
       file
       newsboat
       neovim
-      bat
       # fzf-tmux
 
       # texlive.combined.scheme-full
@@ -147,8 +130,6 @@
 
       # qmk
       # qmk-udev-rules
-      p7zip
-      ruby
       zip
     ];
   };

@@ -19,6 +19,7 @@ in
     modules = [
       agenix.darwinModules.default
       ./configuration.nix
+      ../../modules/ssh-hardened-darwin.nix
       ./restic.nix
       {
         environment.systemPackages = with pkgs; [

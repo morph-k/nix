@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   imports = [
+    ../../modules/home-common.nix
     ../../modules/lf
     ../../modules/zathura
     ../../modules/hammerspoon.nix
@@ -8,6 +9,14 @@
   programs = {
     home-manager = {
       enable = true;
+    };
+
+    # mcfly (Ctrl-R history): package + options managed here. The `mcfly init zsh`
+    # hook stays in the stowed ~/.zshrc since zsh isn't a home-manager program.
+    mcfly = {
+      enable = true;
+      keyScheme = "vim";
+      enableZshIntegration = false;
     };
 
     # Emacs with packages - config is stowed from ~/dots/emacs
@@ -95,46 +104,26 @@
     };
 
     packages = with pkgs; [
+      # NOTE: CLI tools common to all hosts live in modules/home-common.nix.
+
       # Archive/compression
-      p7zip
       unar
       xz
       zstd
 
-      # Shell & navigation
-      autojump
-      starship
-      zsh
-      atuin
-      mcfly
-
       # File tools
-      ripgrep
-      fd
-      fzf
-      eza
-      bat
       tree
-      edir
       rename
       fswatch
       watchexec
 
-      # Git & version control
-      gh
-      delta
-
       # Text/document processing
-      pandoc
-      jq
       glow
       gum
 
       # Development tools
       coreutils
       neovim
-      tmux
-      abduco
       entr
       cmake
       meson
@@ -143,17 +132,14 @@
       moreutils
 
       # Languages & runtimes
-      go
       lua
       luarocks
       nodejs
-      ruby
 
       # Python tools
       pipx
       poetry
       uv
-      jupyter
 
       # System monitoring
       btop
@@ -171,32 +157,27 @@
       mupdf
 
       # Network & communication
-      curl
       wget
       aria2
       socat
-      croc
       qrcp
 
       # Email tools
-      neomutt
-      isync
       notmuch
       msmtp
 
       # Security & encryption
       age
       rage
+      age-plugin-yubikey # PIV/age identities held on a YubiKey (agenix recipient)
+      yubikey-manager # `ykman` for managing the YubiKey
 
       # Nix tools
       deadnix
 
       # Other utilities
       stow
-      tealdeer
       todoist
-      ranger
-      stylua
       cscope
       minicom
 

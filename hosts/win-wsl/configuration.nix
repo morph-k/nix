@@ -67,7 +67,8 @@
     ollama = {
       package = pkgs.ollama-cuda;
       enable = true;
-      acceleration = "cuda";
+      # acceleration removed — no longer has effect (nixpkgs asserts); the
+      # ollama-cuda package already provides CUDA acceleration.
       environmentVariables = {
         OLLAMA_HOST = "0.0.0.0:11434";
         OLLAMA_ORIGINS = "*";

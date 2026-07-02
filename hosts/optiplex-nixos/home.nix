@@ -7,6 +7,7 @@
   ...
 }: {
   imports = [
+    ../../modules/home-common.nix
     # ../../modules/i3.nix
     # ../../modules/redshift.nix
     # ../../modules/pass.nix
@@ -22,6 +23,14 @@
   programs = {
     home-manager = {
       enable = true;
+    };
+
+    # mcfly (Ctrl-R history): package + options managed here. The `mcfly init zsh`
+    # hook stays in the stowed ~/.zshrc since zsh isn't a home-manager program.
+    mcfly = {
+      enable = true;
+      keyScheme = "vim";
+      enableZshIntegration = false;
     };
     # morphEmacs = { # Disabled: module not available on Linux
     #   enable = true;
@@ -63,33 +72,14 @@
     homeDirectory = "/home/morph";
     stateVersion = "22.05";
     packages = with pkgs; [
-      tmux
-      abduco
-      zsh
+      # NOTE: CLI tools common to all hosts live in modules/home-common.nix.
       # atuin
-      starship
-      eza
-      bat
-      tealdeer
-      fd
-      gh
       clipmenu
-      delta
       # cscope
       # pastel
-      jupyter
-      ruby
-      edir
-      ranger
-      stylua
       cargo
-      jq
-      curl
-      fzf
       sbcl
-      neomutt
       mu
-      isync
       msmtp
       pass
       # calibre
@@ -101,18 +91,12 @@
       # kicad
       # ffmpeg
       eva
-      mcfly
       # aria2
       # hyperfine
       hexyl
-      ripgrep
-      autojump
-      pandoc
-      croc
       spotify
       # neofetch
       zathura
-      go
       # viu
       # mpv
       feh
@@ -161,8 +145,6 @@
       # avrlibc
 
       # documents packages
-      p7zip
-      ruby
       # emacs
       # csv
       # xsv

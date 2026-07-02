@@ -4,6 +4,7 @@
   ...
 }: {
   imports = [
+    ../../modules/ssh-hardened.nix
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./tailscale.nix
@@ -314,6 +315,23 @@
   # $ nix search wget
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
+  # nix-community cache for pre-built emacs-unstable and other packages
+  nix.settings.substituters = [
+    "https://cache.nixos.org"
+    "https://nix-community.cachix.org"
+  ];
+  nix.settings.trusted-public-keys = [
+    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  ];
+
+  # Automatic GC + store optimisation (server host — keep disk in check)
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 14d";
+  };
+  nix.optimise.automatic = true;
+
   # networking.firewall = {
   #   # warning: Strict reverse path filtering breaks Tailscale
   #   # exit node use and some subnet routing setups.
@@ -357,7 +375,6 @@
     rage
     brave
     firefox
-    mcfly
     neovim
     flashrom
     code-cursor

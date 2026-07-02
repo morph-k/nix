@@ -21,7 +21,7 @@ ifeq ($(UNAME_S),Linux)
 	EDIT_DEF := nvim hosts/$(HOSTNAME)/default.nix
 endif
 ifeq ($(UNAME_S),Darwin)
-	BUILD_CMD  := nix build --experimental-features 'nix-command flakes' '.\#darwinConfigurations.$(HOSTNAME).system' --impure
+	BUILD_CMD  := nix build --experimental-features 'nix-command flakes' '.\#darwinConfigurations.$(HOSTNAME).system'
 	SWITCH_CMD := sudo sh -c 'rm -rf /etc/shells && ./result/sw/bin/darwin-rebuild switch --flake .'
 	EDIT_HOME := nvim hosts/$(HOSTNAME)/configuration.nix
 	EDIT_CONF := nvim hosts/$(HOSTNAME)/home.nix
@@ -81,10 +81,10 @@ macmini-build-and-switch:
 	nix build --experimental-features 'nix-command flakes' '.\#darwinConfigurations.macmini-darwin.system' --impure
 	sudo sh -c 'rm -rf /etc/shells && ./result/sw/bin/darwin-rebuild switch --flake .'
 
-# xps17-nixos (NixOS)
-xps17-build-and-switch:
-	nixos-rebuild build --flake '.\#xps17-nixos'
-	nixos-rebuild switch --flake '.\#xps17-nixos' --impure --sudo
+# xps17-nixos (NixOS) — DISABLED: host not wired into flake outputs
+# xps17-build-and-switch:
+# 	nixos-rebuild build --flake '.\#xps17-nixos'
+# 	nixos-rebuild switch --flake '.\#xps17-nixos' --impure --sudo
 
 # optiplex-nixos (NixOS)
 optiplex-build-and-switch:
@@ -96,9 +96,9 @@ t480-build-and-switch:
 	nixos-rebuild build --flake '.\#t480-nixos'
 	nixos-rebuild switch --flake '.\#t480-nixos' --impure --sudo
 
-# Remote building for xps17-nixos from any machine (including Mac)
-# Requires: SSH access to xps17-nixos via tailscale or direct connection
-REMOTE_HOST ?= xps17-nixos
+# Remote building from any machine (including Mac). Override REMOTE_HOST as needed.
+# Requires: SSH access to the target via tailscale or direct connection
+REMOTE_HOST ?= optiplex-nixos
 REMOTE_USER ?= morph
 REMOTE_NIX_DIR ?= ~/nix
 REMOTE := $(REMOTE_USER)@$(REMOTE_HOST)
@@ -111,14 +111,12 @@ remote-build:
 	@echo "Building on $(REMOTE_HOST)..."
 	ssh $(REMOTE) "cd $(REMOTE_NIX_DIR) && git pull && make build"
 
-# Build xps17-nixos config locally on Mac and deploy via SSH
-# This uses nixos-rebuild's --target-host to deploy to remote
-# Requires: linux-builder or remote builder configured on Mac
-xps-deploy:
-	nix run nixpkgs#nixos-rebuild -- switch --flake '.#xps17-nixos' \
-		--target-host $(REMOTE) \
-		--build-host $(REMOTE) \
-		--sudo
+# xps-deploy DISABLED: xps17-nixos not wired into flake outputs
+# xps-deploy:
+# 	nix run nixpkgs#nixos-rebuild -- switch --flake '.#xps17-nixos' \
+# 		--target-host $(REMOTE) \
+# 		--build-host $(REMOTE) \
+# 		--sudo
 
 optiplex-deploy:
 	nix run nixpkgs#nixos-rebuild -- switch --flake '.#optiplex-nixos' \
@@ -130,10 +128,10 @@ optiplex-build-remote:
 	nix run nixpkgs#nixos-rebuild -- build --flake '.#optiplex-nixos' \
 		--build-host morph@optiplex-nixos
 
-# Build only (no switch) on remote builder
-xps-build-remote:
-	nix run nixpkgs#nixos-rebuild -- build --flake '.#xps17-nixos' \
-		--build-host $(REMOTE)
+# Build only (no switch) on remote builder — DISABLED: xps17-nixos not in flake
+# xps-build-remote:
+# 	nix run nixpkgs#nixos-rebuild -- build --flake '.#xps17-nixos' \
+# 		--build-host $(REMOTE)
 
 clean:
 	@if [ "$(UNAME_S)" = "Linux" ]; then \

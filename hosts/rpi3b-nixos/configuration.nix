@@ -49,8 +49,8 @@
   boot.cleanTmpDir = true;
 
   # Configure basic SSH access
+  # Hardened sshd defaults come from modules/ssh-hardened.nix (imported below).
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "yes";
 
   # Use 1GB of additional swap memory in order to not run out of memory
   # when installing lots of things while running other things at the same time.
