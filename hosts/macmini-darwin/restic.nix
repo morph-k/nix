@@ -22,7 +22,6 @@
     };
   };
 
-  # Install restic
   environment.systemPackages = [pkgs.restic];
 
   # Restic backup to BorgBase — runs every 4 hours
@@ -59,7 +58,6 @@
           # Initialize repo if needed (idempotent)
           restic snapshots > /dev/null 2>&1 || restic init >> "$LOG" 2>&1
 
-          # Run backup
           restic backup \
             --verbose \
             --exclude='.DS_Store' \

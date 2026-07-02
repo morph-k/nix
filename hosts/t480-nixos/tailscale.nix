@@ -5,7 +5,6 @@
   inputs,
   ...
 }: {
-  # tailscale
   services.tailscale = {
     enable = true;
   };
@@ -24,10 +23,8 @@
     wants = ["network-pre.target" "tailscale.service"];
     wantedBy = ["multi-user.target"];
 
-    # set this service as a oneshot job
     serviceConfig.Type = "oneshot";
 
-    # have the job run this shell script
     script = with pkgs; ''
       # wait for tailscaled to settle
       sleep 2
@@ -50,7 +47,6 @@
       # warning: Strict reverse path filtering breaks Tailscale
       # exit node use and some subnet routing setups.
       checkReversePath = "loose";
-      # enable the firewall
       enable = true;
 
       # always allow traffic from your Tailscale network

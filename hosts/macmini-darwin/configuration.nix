@@ -39,13 +39,11 @@
   environment = {
     shells = with pkgs; [zsh];
     variables = {
-      # System variables
       EDITOR = "nvim";
       VISUAL = "nvim";
       TERMINAL = "ghostty";
     };
     systemPackages = with pkgs; [
-      # Installed Nix packages
       # Terminal
       git
       fd
@@ -78,7 +76,6 @@
   };
 
   programs = {
-    # Shell needs to be enabled
     zsh.enable = true;
   };
 
@@ -182,7 +179,6 @@
     primaryUser = "morph";
     defaults = {
       NSGlobalDomain = {
-        # Global macOS system settings
         KeyRepeat = 1;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticSpellingCorrectionEnabled = false;
@@ -193,7 +189,6 @@
         # "com.apple.mouse.linear" = true;  # Disable smooth scrolling - NOT SUPPORTED by nix-darwin
       };
       dock = {
-        # Dock settings
         autohide = true;
         orientation = "left";
         showhidden = true;
@@ -209,7 +204,6 @@
         expose-animation-duration = 0.1; # Speed up Mission Control animations
       };
       finder = {
-        # Finder settings
         QuitMenuItem = false; # I believe this probably will need to be true if using spacebar
         # DisableAllAnimations = true;  # NOT SUPPORTED by nix-darwin
 
@@ -223,7 +217,6 @@
         _FXSortFoldersFirst = true; # Keep folders on top when sorting
       };
       trackpad = {
-        # Trackpad settings
         Clicking = true;
         TrackpadRightClick = true;
       };

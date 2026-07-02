@@ -100,7 +100,6 @@ in {
     mode = "0400";
   };
 
-  # Add RustDesk client package
   environment.systemPackages = with pkgs; [
     rustdesk
     xorg.xrandr

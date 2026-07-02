@@ -107,7 +107,6 @@
 
   nixpkgs.overlays = [];
 
-  # Enable SSH via macOS Remote Login (sshd)
   services.openssh = {
     enable = true;
   };
@@ -131,7 +130,6 @@
     enable = true;
   };
 
-  # Emacs daemon service
   services.emacs-daemon = {
     enable = false;
     package = pkgs.emacs;

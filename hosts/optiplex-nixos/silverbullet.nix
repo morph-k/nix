@@ -43,6 +43,5 @@ in {
     "d ${notesPath} 0750 ${user} users - -"
   ];
 
-  # Open firewall port
   networking.firewall.allowedTCPPorts = [3030];
 }

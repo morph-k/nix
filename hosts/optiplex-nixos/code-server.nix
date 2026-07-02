@@ -3,7 +3,6 @@
   pkgs,
   ...
 }: {
-  # code-server configuration
   services.code-server = {
     enable = true;
     user = "morph";

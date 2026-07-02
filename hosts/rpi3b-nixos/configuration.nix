@@ -10,7 +10,6 @@
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
 
-  # Use the extlinux boot loader
   boot.loader.generic-extlinux-compatible.enable = true;
 
   # if you have a Raspberry Pi 2 or 3, pick this:
@@ -48,7 +47,6 @@
   nix.gc.options = "--delete-older-than 30d";
   boot.cleanTmpDir = true;
 
-  # Configure basic SSH access
   # Hardened sshd defaults come from modules/ssh-hardened.nix (imported below).
   services.openssh.enable = true;
 
@@ -79,10 +77,8 @@
     wants = ["network-pre.target" "tailscale.service"];
     wantedBy = ["multi-user.target"];
 
-    # set this service as a oneshot job
     serviceConfig.Type = "oneshot";
 
-    # have the job run this shell script
     script = with pkgs; ''
       # wait for tailscaled to settle
       sleep 2
@@ -102,7 +98,6 @@
     # warning: Strict reverse path filtering breaks Tailscale
     # exit node use and some subnet routing setups.
     checkReversePath = "loose";
-    # enable the firewall
     enable = true;
 
     # always allow traffic from your Tailscale network

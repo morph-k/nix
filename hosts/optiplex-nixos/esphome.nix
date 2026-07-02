@@ -6,12 +6,11 @@
   # ESPHome for XIAO ESP32-S3 Sense Camera System
   # Project location: ~/projects/home-camera
 
-  # Install ESPHome and dependencies
   environment.systemPackages = with pkgs; [
     esphome # ESPHome CLI and libraries
     platformio-core # PlatformIO for ESP32 compilation
     esptool # ESP32 flashing tool
-    python3 # Python runtime
+    python3
     python3Packages.pip
   ];
 
@@ -36,7 +35,6 @@
     SUBSYSTEM=="tty", ATTRS{idVendor}=="303a", MODE="0666", GROUP="dialout"
   '';
 
-  # Ensure dialout and plugdev groups exist
   users.groups.dialout = {};
   users.groups.plugdev = {};
 

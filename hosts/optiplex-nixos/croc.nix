@@ -3,7 +3,6 @@
   pkgs,
   ...
 }: {
-  # Add croc to system packages
   environment.systemPackages = with pkgs; [
     croc
   ];

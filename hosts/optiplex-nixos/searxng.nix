@@ -76,7 +76,7 @@
     description = "Create Docker network for SearXNG";
     after = ["docker.service"];
     requires = ["docker.service"];
-    wantedBy = ["multi-user.target"]; # Auto-start on boot
+    wantedBy = ["multi-user.target"];
     before = ["docker-searxng.service" "docker-searxng-redis.service"];
 
     serviceConfig = {
@@ -94,7 +94,6 @@
   systemd.services.docker-searxng.requires = ["init-searxng-network.service"];
   systemd.services.docker-searxng-redis.requires = ["init-searxng-network.service"];
 
-  # Enable Docker
   virtualisation.docker.enable = true;
   virtualisation.oci-containers.backend = "docker";
 }

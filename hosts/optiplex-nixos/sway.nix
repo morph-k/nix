@@ -4,7 +4,6 @@
   lib,
   ...
 }: {
-  # Enable Sway window manager (Wayland compositor)
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;

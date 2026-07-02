@@ -16,12 +16,10 @@
   # Data directory for RustDesk
   rustdesk_data = "/var/lib/rustdesk";
 in {
-  # Create data directory
   systemd.tmpfiles.rules = [
     "d ${rustdesk_data} 0750 rustdesk rustdesk - -"
   ];
 
-  # Create rustdesk user
   users.users.rustdesk = {
     isSystemUser = true;
     group = "rustdesk";

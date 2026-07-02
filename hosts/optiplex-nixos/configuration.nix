@@ -54,20 +54,16 @@
   # networking.proxy.default = "http://proxy.example.com:8080";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # Select internationalisation properties
   i18n.defaultLocale = "en_US.UTF-8";
 
   services = {
     # Sway with greetd autologin (configured in sway.nix)
     # Removed GNOME/GDM configuration - using Sway + greetd instead
 
-    # Enable the X11 windowing system.
     # Prevent system from suspending/hibernating; keep always on
     logind = {
       settings = {
@@ -222,7 +218,6 @@
   #   "caps:escape" # map caps to escape.
   # };
 
-  # Enable CUPS to print documents.
   services.printing.enable = true;
 
   # Enable sound.
@@ -270,7 +265,6 @@
   # };
   programs.zsh.enable = true;
 
-  # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   # Open ports in the firewall.
@@ -292,7 +286,6 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
 
-  # Enable Docker
   virtualisation.docker.enable = true;
 
   # Open firewall ports for self-hosted apps and BitTorrent forwarding

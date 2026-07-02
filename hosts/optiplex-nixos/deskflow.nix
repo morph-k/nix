@@ -6,7 +6,6 @@
 }: {
   # Input Leap (Synergy fork) - Share keyboard/mouse across computers
 
-  # Install Input Leap
   environment.systemPackages = with pkgs; [
     input-leap # Keyboard/mouse sharing across computers
   ];

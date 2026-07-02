@@ -16,7 +16,6 @@
     "restic/password".file = ../../secrets/restic/password.age;
   };
 
-  # install restic package
   environment.systemPackages = [pkgs.restic];
 
   services.restic.backups = {

@@ -31,7 +31,6 @@
   # This prevents automatic kernel updates on every build
   boot.kernelPackages = pkgs.linuxPackages_6_12;
 
-  # Enable networking
   networking = {
     hostName = "t480-nixos";
     networkmanager.enable = true;
@@ -62,10 +61,8 @@
   # Enable tailscale Mesh VPN
   # services.tailscale.enable = true;
 
-  # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -207,7 +204,6 @@
   #   };
   # };
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).

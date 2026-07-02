@@ -22,7 +22,6 @@
   # Primary network interface
   interface = "enp0s31f6";
 in {
-  # Enable Wake-on-LAN for the primary network interface
   networking.interfaces.${interface}.wakeOnLan.enable = true;
 
   # Install ethtool for WoL and NIC management

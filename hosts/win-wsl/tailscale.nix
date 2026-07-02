@@ -23,10 +23,8 @@
     wants = ["network-pre.target" "tailscale.service"];
     wantedBy = ["multi-user.target"];
 
-    # set this service as a oneshot job
     serviceConfig.Type = "oneshot";
 
-    # have the job run this shell script
     script = with pkgs; ''
       # wait for tailscaled to settle
       sleep 2

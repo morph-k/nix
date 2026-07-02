@@ -4,14 +4,12 @@
   lib,
   ...
 }: {
-  # Enable Waydroid virtualisation service
   # This automatically handles kernel modules and configuration
   virtualisation.waydroid.enable = true;
 
   # Add user to required groups for hardware access
   users.users.morph.extraGroups = ["video" "render"];
 
-  # Enable hardware graphics acceleration
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # For 32-bit Android apps

@@ -66,7 +66,6 @@
 
     mkdir -p "$CONFIG_DIR"
 
-    # Read the encryption key from secret
     if [ -f "$KEY_FILE" ]; then
       RUSTDESK_KEY=$(cat "$KEY_FILE")
     else
@@ -74,7 +73,6 @@
       exit 1
     fi
 
-    # Generate config with the actual key
     ${pkgs.gnused}/bin/sed "s/RUSTDESK_KEY_PLACEHOLDER/$RUSTDESK_KEY/" ${rustdeskConfigTemplate} > "$CONFIG_DIR/RustDesk2.toml"
     chmod 600 "$CONFIG_DIR/RustDesk2.toml"
 
