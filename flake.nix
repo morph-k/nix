@@ -52,10 +52,6 @@
       url = "github:morph-k/rawtalk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    agtx = {
-      url = "github:fynnfluegge/agtx";
-      flake = false;
-    };
   };
 
   outputs = {
@@ -70,7 +66,6 @@
     nixified-ai,
     fakwin,
     rawtalk,
-    agtx,
     ...
   } @ inputs: let
     user = "morph";
@@ -89,7 +84,7 @@
 
     # mac_mini MacOs
     darwinConfigurations.macmini-darwin = import ./hosts/macmini-darwin {
-      inherit self nixpkgs darwin inputs user home-manager agenix emacs-overlay rawtalk agtx;
+      inherit self nixpkgs darwin inputs user home-manager agenix emacs-overlay rawtalk;
     };
 
     # macbook_pro MacOs

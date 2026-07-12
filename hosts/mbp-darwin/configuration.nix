@@ -80,8 +80,6 @@
       "karabiner-elements"
       "keycastr"
       "raycast"
-      "spotify"
-      "ghostty"
       "utm"
       "secretive"
     ];

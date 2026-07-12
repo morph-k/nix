@@ -23,22 +23,6 @@
         "type": "github"
       }
     },
-    "agtx": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1783787928,
-        "narHash": "sha256-JoQtbdjLNxTX+K1fMN9ZWqbO+OE+1Sa3A9xOjIiu3G0=",
-        "owner": "fynnfluegge",
-        "repo": "agtx",
-        "rev": "72852f0170a2aa885239756ea1f1e5676eeee759",
-        "type": "github"
-      },
-      "original": {
-        "owner": "fynnfluegge",
-        "repo": "agtx",
-        "type": "github"
-      }
-    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -532,7 +516,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "agtx": "agtx",
         "darwin": "darwin_2",
         "discord": "discord",
         "emacs-overlay": "emacs-overlay",
