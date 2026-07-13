@@ -100,7 +100,7 @@
       # viu
       # mpv
       feh
-      sublime
+      # sublime  # removed from nixpkgs; sublime4 fails to evaluate (unfree/broken)
       surfraw
       nix-index
       redshift
@@ -119,7 +119,7 @@
       # nodePackages.bash-language-server
       # nodePackages.pyright
       # nodePackages.typescript
-      nodePackages.prettier
+      prettier
       # ccls
       # mathpix-snipping-tool
       black

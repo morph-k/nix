@@ -1,43 +1,19 @@
+# WSL host. Kept hand-written (rather than routed through lib.mkNixos) because
+# it has no home-manager, uses the nixos-wsl module, and its modules expect the
+# raw flake inputs (nixos-wsl, agenix, nixified-ai) as named specialArgs.
 {
-  home-manager,
-  agenix,
-  self,
-  nixpkgs,
   inputs,
   user,
-  overlays,
-  nixified-ai,
   ...
 }:
-nixpkgs.lib.nixosSystem {
+inputs.nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
+  specialArgs = inputs // {inherit user;};
   modules = [
-    # ./hosts/win-wsl
     ./configuration.nix
     inputs.nixos-wsl.nixosModules.wsl
-    # vscode-server.nixosModule
-    {
-      environment.systemPackages = with nixpkgs.legacyPackages.x86_64-linux; [
-        alejandra
-        # neovim.packages.x86_64-linux.neovim
-      ];
-    }
-    # home-manager.nixosModules.home-manager
-    # {
-    #   home-manager = {
-    #     useGlobalPkgs = true;
-    #     useUserPackages = true;
-    #     users.${user}.imports = [./home.nix];
-    #     # extraSpecialArgs = {
-    #     #   plover = inputs.plover.packages."x86_64-linux".plover;
-    #     # };
-    #   };
-    # }
+    ({pkgs, ...}: {
+      environment.systemPackages = [pkgs.alejandra];
+    })
   ];
-  specialArgs =
-    inputs
-    // {
-      agenix = agenix;
-      nixified-ai = nixified-ai;
-    };
 }

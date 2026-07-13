@@ -7,8 +7,7 @@ System configurations for macOS, NixOS, and WSL.
 | Host               | OS          | Arch    |
 |--------------------|-------------|---------|
 | `macmini-darwin`   | macOS       | aarch64 |
-| `xps17-nixos`      | NixOS       | x86_64  |
-| `t480-nixos`       | NixOS       | x86_64  |
+| `mbp-darwin`       | macOS       | aarch64 |
 | `optiplex-nixos`   | NixOS (ZFS) | x86_64  |
 | `win-wsl`          | NixOS (WSL) | x86_64  |
 | `rpi3b-nixos`      | NixOS       | aarch64 |

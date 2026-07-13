@@ -1,0 +1,48 @@
+name: flake check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: x86_64-linux
+            os: ubuntu-latest
+            hosts: nixosConfigurations.optiplex-nixos.config.system.build.toplevel nixosConfigurations.win-wsl.config.system.build.toplevel
+          - system: aarch64-darwin
+            os: macos-latest
+            hosts: darwinConfigurations.macmini-darwin.system darwinConfigurations.mbp-darwin.system
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      # Formatting gate.
+      - name: formatting
+        run: nix build -L --no-link ".#checks.${{ matrix.system }}.formatting"
+
+      # Evaluate each host for this system one at a time. Full evaluation
+      # (not a build) catches removed packages, option conflicts, and wiring
+      # errors; evaluating sequentially keeps peak memory low and avoids the
+      # heavy cross-system outputs a monolithic `nix flake check` would pull in.
+      - name: evaluate hosts
+        run: |
+          for attr in ${{ matrix.hosts }}; do
+            echo "::group::eval $attr"
+            nix eval --raw ".#$attr.drvPath" --show-trace
+            echo
+            echo "::endgroup::"
+          done

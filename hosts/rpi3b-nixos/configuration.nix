@@ -12,8 +12,8 @@
 
   boot.loader.generic-extlinux-compatible.enable = true;
 
-  # if you have a Raspberry Pi 2 or 3, pick this:
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Kernel is provided by the nixos-hardware raspberry-pi-3 module.
+  # (Setting boot.kernelPackages here conflicts with it.)
 
   # A bunch of boot parameters needed for optimal runtime on RPi 3b+
   boot.kernelParams = ["cma=256M"];

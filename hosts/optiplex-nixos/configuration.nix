@@ -374,6 +374,6 @@
     dysk
     docker-compose
     claude-code
-    nodejs_20 # Required for VSCode/Cursor Remote SSH
+    nodejs_22 # Required for VSCode/Cursor Remote SSH (20 is EOL/insecure)
   ];
 }

@@ -7,12 +7,6 @@
 }: {
   age.identityPaths = ["/home/morph/.ssh/id_ed25519"];
   age.secrets.ts-optiplex-nixos.file = ../../secrets/ts-optiplex-nixos.age;
-  age.secrets.qbittorrent-webui-password = {
-    file = ../../secrets/qbittorrent-optiplex-nixos.age;
-    owner = "morph";
-    group = "users";
-    mode = "0400";
-  };
 
   services.tailscale = {
     enable = true;
