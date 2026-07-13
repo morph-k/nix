@@ -66,26 +66,6 @@
         "type": "github"
       }
     },
-    "discord": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1777323637,
-        "narHash": "sha256-IMBf7uDeZNS4+qQGoqYToo3nfVx3/e7Xin9ji/Hn7T4=",
-        "owner": "InternetUnexplorer",
-        "repo": "discord-overlay",
-        "rev": "675ffdddb8bc091cd5bb00cbc745c631b3ac9829",
-        "type": "github"
-      },
-      "original": {
-        "owner": "InternetUnexplorer",
-        "repo": "discord-overlay",
-        "type": "github"
-      }
-    },
     "emacs-overlay": {
       "inputs": {
         "nixpkgs": [
@@ -104,22 +84,6 @@
       "original": {
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "type": "github"
-      }
-    },
-    "fakwin": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1767192909,
-        "narHash": "sha256-q5YHsp2EG/d/w36eLMEdEDCy6/3Ffuy/pRzDGXO40Sk=",
-        "owner": "DMaroo",
-        "repo": "fakwin",
-        "rev": "79bce1f78ab2f1047dac68d0a519a22352c544ec",
-        "type": "github"
-      },
-      "original": {
-        "owner": "DMaroo",
-        "repo": "fakwin",
         "type": "github"
       }
     },
@@ -517,9 +481,7 @@
       "inputs": {
         "agenix": "agenix",
         "darwin": "darwin_2",
-        "discord": "discord",
         "emacs-overlay": "emacs-overlay",
-        "fakwin": "fakwin",
         "home-manager": "home-manager_2",
         "nixified-ai": "nixified-ai",
         "nixos-hardware": "nixos-hardware",

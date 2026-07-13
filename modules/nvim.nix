@@ -89,14 +89,14 @@ in {
 
     extraPackages = with pkgs; [
       tree-sitter
-      rnix-lsp
-      nodePackages.typescript
-      sumneko-lua-language-server
-      nodePackages.typescript-language-server
-      nodePackages.bash-language-server
+      nil
+      typescript
+      lua-language-server
+      typescript-language-server
+      bash-language-server
       gopls
-      nodePackages.pyright
-      nodePackages.prettier
+      pyright
+      prettier
       black
       rust-analyzer
     ];

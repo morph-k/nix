@@ -17,10 +17,6 @@
       url = "github:nix-community/nixos-wsl";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    discord = {
-      url = "github:InternetUnexplorer/discord-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,10 +40,6 @@
     nixified-ai = {
       url = "github:nixified-ai/flake";
     };
-    fakwin = {
-      url = "github:DMaroo/fakwin";
-      flake = false;
-    };
     rawtalk = {
       url = "github:morph-k/rawtalk";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -57,68 +49,90 @@
   outputs = {
     self,
     nixpkgs,
-    home-manager,
-    darwin,
-    agenix,
-    emacs-overlay,
-    discord,
-    nixos-hardware,
-    nixified-ai,
-    fakwin,
-    rawtalk,
     ...
   } @ inputs: let
     user = "morph";
-    overlays = [
-      discord.overlays.default
-    ];
-    # List of unix configurations
+
+    # Shared host builders (see ./lib/default.nix).
+    hostLib = import ./lib {inherit inputs user;};
+
+    # Args handed to every hosts/*/default.nix. Each host destructures only
+    # what it needs (all headers end with `...`).
+    hostArgs =
+      {inherit inputs user;}
+      // {inherit (hostLib) mkDarwin mkNixos mkHome;};
+
+    systems = ["aarch64-darwin" "x86_64-linux" "aarch64-linux"];
+    forAllSystems = nixpkgs.lib.genAttrs systems;
+    pkgsFor = system: nixpkgs.legacyPackages.${system};
+
+    # A check that fails if any Nix file is not alejandra-formatted.
+    fmtCheck = system: let
+      pkgs = pkgsFor system;
+    in
+      pkgs.runCommandLocal "check-formatting" {nativeBuildInputs = [pkgs.alejandra];} ''
+        alejandra --check ${self}
+        touch $out
+      '';
+
+    # Force full evaluation of a host's system closure without building it.
+    # Referencing `drv` in the builder makes Nix evaluate the whole config
+    # (catching removed packages, option conflicts, and wiring errors) while
+    # only realising a trivial derivation — so CI stays fast and independent
+    # of binary-cache timing.
+    evalCheck = system: name: drv: let
+      pkgs = pkgsFor system;
+    in
+      pkgs.runCommandLocal "eval-${name}" {} ''
+        echo "${drv}" > $out
+      '';
   in {
-    # nix formatter
-    formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
-    formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
+    # `nix fmt`
+    formatter = forAllSystems (system: (pkgsFor system).alejandra);
+
+    # `nix develop` — consistent tooling for editing this flake.
+    devShells = forAllSystems (system: let
+      pkgs = pkgsFor system;
+    in {
+      default = pkgs.mkShell {
+        packages = [
+          pkgs.alejandra
+          pkgs.nil
+          pkgs.git
+          inputs.agenix.packages.${system}.default
+        ];
+      };
+    });
+
+    # `nix flake check` — evaluate every host for its native system and enforce
+    # formatting. Evaluation (not a full build) keeps CI fast and cache-timing
+    # independent; run `nix build .#darwinConfigurations.<host>.system` locally
+    # for a real build. CI runs this per-system (see .github/workflows/check.yml).
+    checks = {
+      aarch64-darwin = {
+        formatting = fmtCheck "aarch64-darwin";
+        eval-macmini = evalCheck "aarch64-darwin" "macmini" self.darwinConfigurations.macmini-darwin.system.drvPath;
+        eval-mbp = evalCheck "aarch64-darwin" "mbp" self.darwinConfigurations.mbp-darwin.system.drvPath;
+      };
+      x86_64-linux = {
+        formatting = fmtCheck "x86_64-linux";
+        eval-optiplex = evalCheck "x86_64-linux" "optiplex" self.nixosConfigurations.optiplex-nixos.config.system.build.toplevel.drvPath;
+        eval-win-wsl = evalCheck "x86_64-linux" "win-wsl" self.nixosConfigurations.win-wsl.config.system.build.toplevel.drvPath;
+      };
+    };
 
     # SD card image for Raspberry Pi 3B
-    # NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nix build .#packages.aarch64-darwin.rpi3b-sdcard --impure
-    packages.aarch64-linux.rpi3b-sdcard = self.nixosConfigurations.rpi3b-nixos.config.system.build.sdImage;
+    # NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nix build .#packages.aarch64-linux.rpi3b-sdcard --impure
+    packages.aarch64-linux.rpi3b-sdcard =
+      self.nixosConfigurations.rpi3b-nixos.config.system.build.sdImage;
 
-    # mac_mini MacOs
-    darwinConfigurations.macmini-darwin = import ./hosts/macmini-darwin {
-      inherit self nixpkgs darwin inputs user home-manager agenix emacs-overlay rawtalk;
-    };
+    # ── Darwin hosts ────────────────────────────────────────────────────────
+    darwinConfigurations.macmini-darwin = import ./hosts/macmini-darwin hostArgs;
+    darwinConfigurations.mbp-darwin = import ./hosts/mbp-darwin hostArgs;
 
-    # macbook_pro MacOs
-    darwinConfigurations.mbp-darwin = import ./hosts/mbp-darwin {
-      inherit self nixpkgs darwin inputs user home-manager agenix emacs-overlay rawtalk;
-    };
-
-    # optiplex NixOs
-    nixosConfigurations.optiplex-nixos = import ./hosts/optiplex-nixos {
-      inherit nixpkgs self inputs user home-manager agenix overlays;
-    };
-
-    # win-wsl NixOs
-    nixosConfigurations.win-wsl = import ./hosts/win-wsl {
-      inherit nixpkgs self inputs user home-manager agenix overlays nixified-ai;
-    };
-
-    # visionfive2 NixOs
-    # https://github.com/NixOS/nixos-hardware/tree/master/starfive/visionfive/v1
-    # nixosConfigurations.visionfive2 = nixpkgs.lib.nixosSystem {
-    #   system = "riscv64-linux";
-    #   modules = [
-    #     nixos-hardware.nixosModules.starfive-visionfive-v1
-    #     {
-    #       # with nix channel
-    #       # imports = [<nixos-hardware/starfive/visionfive/v1/sd-image-installer.nix>];
-    #
-    #       nixpkgs.crossSystem = {
-    #         config = "riscv64-unknown-linux-gnu";
-    #         system = "riscv64-linux";
-    #       };
-    #     }
-    #   ];
-    # };
+    # ── NixOS hosts ─────────────────────────────────────────────────────────
+    nixosConfigurations.optiplex-nixos = import ./hosts/optiplex-nixos hostArgs;
+    nixosConfigurations.win-wsl = import ./hosts/win-wsl hostArgs;
 
     # riscv-vm NixOS
     nixosConfigurations.riscv-vm = nixpkgs.lib.nixosSystem {
@@ -137,22 +151,18 @@
       ];
     };
 
-    # rpi3b NixOS (cross-compile on Darwin → aarch64-linux)
+    # rpi3b NixOS (cross-compiled to aarch64-linux). `crossSystem` is not a
+    # valid argument to nixosSystem; the platform is set via nixpkgs options in
+    # a module instead. buildPlatform is left unpinned so it can be built from
+    # x86_64-linux (CI) or an aarch64 machine natively.
     nixosConfigurations.rpi3b-nixos = nixpkgs.lib.nixosSystem {
-      system = "aarch64-linux";
-
-      # 2) tell Nix how to cross
-      crossSystem = {
-        system = "aarch64-unknown-linux-gnu";
-        config = "aarch64-linux";
-      };
-
       specialArgs = inputs;
       modules = [
+        {nixpkgs.hostPlatform = "aarch64-linux";}
         "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-        nixos-hardware.nixosModules.raspberry-pi-3
+        inputs.nixos-hardware.nixosModules.raspberry-pi-3
         ./hosts/rpi3b-nixos
-        agenix.nixosModules.default
+        inputs.agenix.nixosModules.default
         {
           nixpkgs.config.allowUnsupportedSystem = true;
           nixpkgs.config.allowBroken = true;
