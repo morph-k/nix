@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  plover,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ../../modules/home-common.nix
     # ../../modules/i3.nix

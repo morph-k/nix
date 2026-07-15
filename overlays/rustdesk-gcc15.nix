@@ -1,6 +1,6 @@
 # Fix rustdesk's vendored webm-sys failing to compile under GCC 15
 # (missing <cstdint> include). Applied on hosts that build rustdesk from source.
-final: prev: {
+_final: prev: {
   rustdesk = prev.rustdesk.overrideAttrs (old: {
     preBuild =
       (old.preBuild or "")

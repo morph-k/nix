@@ -14,7 +14,6 @@
 #   3. "Deep Sleep Control" -> set to "Disabled" (if available)
 #      (Prevents low-power states that block WoL)
 {
-  config,
   pkgs,
   lib,
   ...

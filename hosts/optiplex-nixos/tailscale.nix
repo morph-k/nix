@@ -1,8 +1,6 @@
 {
   config,
   pkgs,
-  agenix,
-  inputs,
   ...
 }: {
   age.identityPaths = ["/home/morph/.ssh/id_ed25519"];

@@ -1,12 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-} @ args: let
-  # Access inputs from specialArgs
-  inputs = args.inputs or (throw "inputs must be provided via specialArgs");
-in {
+{pkgs, ...}: {
   # ============================================================================
   # VERT File Converter - Complete Setup
   # ============================================================================

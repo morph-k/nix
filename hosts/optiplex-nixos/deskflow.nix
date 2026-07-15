@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   # Input Leap (Synergy fork) - Share keyboard/mouse across computers
 
   environment.systemPackages = with pkgs; [

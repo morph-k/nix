@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   # This automatically handles kernel modules and configuration
   virtualisation.waydroid.enable = true;
 

@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   # ESPHome for XIAO ESP32-S3 Sense Camera System
   # Project location: ~/projects/home-camera
 

@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
+{config, ...}: let
   user = "morph";
   uid = builtins.toString config.users.users.morph.uid;
   gid = builtins.toString config.users.groups.users.gid;

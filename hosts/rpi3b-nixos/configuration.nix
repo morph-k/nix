@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  lib,
   ...
 }: {
   # The nixos-hardware module already includes most of the necessary settings

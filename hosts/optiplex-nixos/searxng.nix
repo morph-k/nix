@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}: {
+{pkgs, ...}: {
   # SearXNG meta search engine
   # Runs in Docker container on port 8888
   # Served via Tailscale at https://optiplex-nixos.tailc585e.ts.net:8443

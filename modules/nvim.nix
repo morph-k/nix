@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -18,26 +17,8 @@ with types; let
       type = "lua";
       config = lib.optionalString (attrs ? config) (genBlockLua attrs.plugin.pname attrs.config);
     };
-
-  makeFtPlugins = ftplugins:
-    with attrsets;
-      mapAttrs'
-      (key: value: nameValuePair "nvim/after/ftplugin/${key}.vim" {text = value;})
-      ftplugins;
-
   # installs a vim plugin from git with a given tag / branch
-  pluginGit = ref: repo:
-    pkgs.vimUtils.buildVimPluginFrom2Nix {
-      pname = "${lib.strings.sanitizeDerivationName repo}";
-      version = ref;
-      src = builtins.fetchGit {
-        url = "https://github.com/${repo}.git";
-        ref = ref;
-      };
-    };
-
   # always installs latest version
-  plugin = pluginGit "HEAD";
 in {
   # install neovim
   nixpkgs.overlays = [
@@ -113,7 +94,7 @@ in {
         #   })
         # '';
       })
-      (nvim-treesitter.withPlugins (p: pkgs.tree-sitter.allGrammars))
+      (nvim-treesitter.withPlugins (_p: pkgs.tree-sitter.allGrammars))
       vim-nix
     ];
   };

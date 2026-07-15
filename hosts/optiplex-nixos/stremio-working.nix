@@ -3,10 +3,7 @@
   lib,
   pkgs,
   ...
-}: let
-  mediaUser = "morph";
-  dataRoot = "/var/lib/stremio";
-in {
+}: {
   # Simple working Stremio server using official web app
   services.nginx = {
     enable = true;

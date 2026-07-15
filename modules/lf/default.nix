@@ -1,9 +1,5 @@
 # https://github.com/vimjoyer/lf-nix-video
-{
-  pkgs,
-  config,
-  ...
-}: let
+{pkgs, ...}: let
   fzf_search = builtins.readFile ./fzf_search;
 in {
   # Download the icons file

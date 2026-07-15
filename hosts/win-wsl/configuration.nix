@@ -1,7 +1,5 @@
 {
-  lib,
   pkgs,
-  config,
   nixos-wsl,
   modulesPath,
   agenix,
