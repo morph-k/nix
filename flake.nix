@@ -28,16 +28,18 @@
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-    tailscale = {
-      url = "github:tailscale/tailscale";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # Dedupe agenix's private dev inputs against ours (drops stale trees).
+      inputs.darwin.follows = "darwin";
+      inputs.home-manager.follows = "home-manager";
     };
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixified-ai = {
+      # Intentionally NOT following nixpkgs: nixified-ai pins its own nixpkgs
+      # for CUDA/pytorch binary compatibility; overriding it risks breaking
+      # comfyui on win-wsl. Accept the second nixpkgs tree here.
       url = "github:nixified-ai/flake";
     };
     rawtalk = {
@@ -118,6 +120,8 @@
         formatting = fmtCheck "x86_64-linux";
         eval-optiplex = evalCheck "x86_64-linux" "optiplex" self.nixosConfigurations.optiplex-nixos.config.system.build.toplevel.drvPath;
         eval-win-wsl = evalCheck "x86_64-linux" "win-wsl" self.nixosConfigurations.win-wsl.config.system.build.toplevel.drvPath;
+        # rpi3b cross-compiles to aarch64-linux but evaluates from x86_64-linux.
+        eval-rpi3b = evalCheck "x86_64-linux" "rpi3b" self.nixosConfigurations.rpi3b-nixos.config.system.build.toplevel.drvPath;
       };
     };
 

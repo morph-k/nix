@@ -19,7 +19,7 @@ jobs:
         include:
           - system: x86_64-linux
             os: ubuntu-latest
-            hosts: nixosConfigurations.optiplex-nixos.config.system.build.toplevel nixosConfigurations.win-wsl.config.system.build.toplevel
+            hosts: nixosConfigurations.optiplex-nixos.config.system.build.toplevel nixosConfigurations.win-wsl.config.system.build.toplevel nixosConfigurations.rpi3b-nixos.config.system.build.toplevel
           - system: aarch64-darwin
             os: macos-latest
             hosts: darwinConfigurations.macmini-darwin.system darwinConfigurations.mbp-darwin.system
