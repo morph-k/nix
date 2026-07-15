@@ -38,10 +38,7 @@
     global = {
       brewfile = false;
     };
-    # aerospace lives in nikitabobko/tap. Homebrew 6.x refuses casks from
-    # untrusted third-party taps; run `brew trust nikitabobko/tap` once per
-    # machine to clear the refusal (not expressible in nix-darwin's homebrew module).
-    taps = ["nikitabobko/tap"];
+    taps = [];
     onActivation = {
       autoUpdate = false;
       cleanup = "none";
@@ -51,7 +48,6 @@
     # GUI apps that require homebrew casks
     casks = [
       "raycast"
-      "aerospace"
       "barrier"
       "buzz"
       "deskflow"
