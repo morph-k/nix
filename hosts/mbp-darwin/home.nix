@@ -113,7 +113,6 @@
       # NOTE: CLI tools common to all hosts live in modules/home-common.nix.
 
       # Archive/compression
-      unar
       xz
       zstd
 
@@ -121,15 +120,12 @@
       tree
       rename
       fswatch
-      watchexec
 
       # Text/document processing
-      glow
       gum
 
       # Development tools
       coreutils
-      entr
       cmake
       meson
       ninja
@@ -148,24 +144,14 @@
 
       # System monitoring
       btop
-      htop
-      dog
-      duf
-      dust
-      tokei
 
       # Media & documents
       ffmpeg
       imagemagick
-      exiftool
-      tesseract
       mupdf
 
       # Network & communication
       wget
-      aria2
-      socat
-      qrcp
 
       # Email tools
       notmuch
@@ -173,7 +159,6 @@
 
       # Security & encryption
       age
-      rage
       age-plugin-yubikey # PIV/age identities held on a YubiKey (agenix recipient)
       yubikey-manager # `ykman` for managing the YubiKey
 
@@ -183,9 +168,6 @@
 
       # Other utilities
       stow
-      todoist
-      cscope
-      minicom
     ];
   };
 }
