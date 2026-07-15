@@ -4,13 +4,38 @@
   pkgs,
   user,
   ...
-}: {
+}: let
+  # Homebrew 6.0 refuses to load formulae/casks from third-party taps unless
+  # they are trusted. `brew trust` writes to $XDG_CONFIG_HOME/homebrew/trust.json
+  # when that is set and ~/.homebrew/trust.json otherwise; nix-darwin runs
+  # `brew bundle` through sudo, which resets the environment and drops
+  # XDG_CONFIG_HOME. Write both paths so activation and interactive shells agree.
+  trustedTaps = {
+    trustedtaps = [
+      "deskflow/tap" # deskflow
+      "nikitabobko/tap" # aerospace
+    ];
+  };
+  trustFile = (pkgs.formats.json {}).generate "homebrew-trust.json" trustedTaps;
+in {
   imports = [
     ./home-common.nix
     ./lf
     ./zathura
     ./hammerspoon.nix
   ];
+
+  # force: these paths may already hold a real file written by `brew trust`.
+  home.file = {
+    ".homebrew/trust.json" = {
+      source = trustFile;
+      force = true;
+    };
+    ".config/homebrew/trust.json" = {
+      source = trustFile;
+      force = true;
+    };
+  };
 
   programs = {
     home-manager = {

@@ -16,7 +16,9 @@
   ];
 
   homebrew = {
-    taps = [];
+    taps = [
+      "deskflow/tap" # deskflow is not in homebrew/cask; trusted in home-darwin-common.nix
+    ];
     # GUI apps that require homebrew casks
     casks = [
       "raycast"
@@ -29,7 +31,6 @@
       "gcloud-cli"
       "ghostty"
       "gpg-suite-no-mail"
-      "hashicorp-vagrant"
       "hiddenbar"
       "keycastr"
       "libndi"
