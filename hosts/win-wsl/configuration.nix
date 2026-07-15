@@ -11,6 +11,9 @@
     "${modulesPath}/profiles/minimal.nix"
     nixos-wsl.nixosModules.wsl
     agenix.nixosModules.default
+    # This WSL host runs sshd (services.openssh below), so apply the shared
+    # hardening (key-only auth, modern crypto). All values are mkDefault.
+    ../../modules/ssh-hardened.nix
     ./tailscale.nix
     ./comfyui.nix
   ];
