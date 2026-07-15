@@ -3,6 +3,6 @@ mkDarwin {
   home = ./home.nix;
   modules = [
     ./configuration.nix
-    # ./restic.nix
+    # ../../modules/restic-darwin.nix
   ];
 }

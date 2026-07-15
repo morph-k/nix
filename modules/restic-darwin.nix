@@ -1,24 +1,27 @@
-# Restic backup of ~/Sync to BorgBase
-# Uses agenix for secrets, launchd for scheduling (every 4 hours)
+# Restic backup of ~/Sync to BorgBase (shared by Darwin hosts).
+# Uses agenix for secrets, launchd for scheduling (every 4 hours).
 {
   config,
   lib,
   pkgs,
+  user,
   ...
-}: {
+}: let
+  home = "/Users/${user}";
+in {
   # Agenix identity for decrypting secrets on macOS
   age.identityPaths = [
-    "/Users/morph/.ssh/id_ed25519"
+    "${home}/.ssh/id_ed25519"
   ];
 
   age.secrets = {
     "restic-borgbase/repo" = {
-      file = ../../secrets/restic-borgbase/repo.age;
-      owner = "morph";
+      file = ../secrets/restic-borgbase/repo.age;
+      owner = user;
     };
     "restic-borgbase/password" = {
-      file = ../../secrets/restic-borgbase/password.age;
-      owner = "morph";
+      file = ../secrets/restic-borgbase/password.age;
+      owner = user;
     };
   };
 
@@ -33,7 +36,7 @@
         "-c"
         ''
           export PATH="${lib.makeBinPath [pkgs.restic pkgs.coreutils]}:/usr/bin:/bin"
-          export HOME="/Users/morph"
+          export HOME="${home}"
 
           REPO_FILE="${config.age.secrets."restic-borgbase/repo".path}"
           PASS_FILE="${config.age.secrets."restic-borgbase/password".path}"
@@ -70,7 +73,7 @@
             --exclude='*.pyc' \
             --exclude='.ruff_cache' \
             --exclude='result' \
-            /Users/morph/Sync \
+            ${home}/Sync \
             >> "$LOG" 2>&1
 
           BACKUP_EXIT=$?
@@ -126,7 +129,7 @@
       Nice = 10;
       ProcessType = "Background";
       EnvironmentVariables = {
-        HOME = "/Users/morph";
+        HOME = "${home}";
       };
     };
   };

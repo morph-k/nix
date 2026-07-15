@@ -27,27 +27,21 @@
       VISUAL = "nvim";
       TERMINAL = "ghostty";
     };
+    # Only genuinely system-level or host-unique tools here. Shared CLI tools
+    # (bat, eza, fd, ripgrep, gh, fzf, delta, autojump, starship) come from
+    # modules/home-common.nix via home-manager (useUserPackages).
     systemPackages = with pkgs; [
       git
-      fd
-      ripgrep
       duti
-      bat
       stow
       tldr
-      autojump
-      starship
       opencode
       cachix
-      gh
-      fzf
-      eza
       btop
       dog
       duf
       dust
       tokei
-      delta
     ];
   };
 
