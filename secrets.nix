@@ -21,7 +21,6 @@ in {
   # ── optiplex-nixos secrets ──────────────────────────────────────────────
   "secrets/ts-optiplex-nixos.age".publicKeys = forHosts [optiplex-nixos];
   "secrets/silverbullet-optiplex-nixos.age".publicKeys = forHosts [optiplex-nixos];
-  "secrets/vnc-optiplex-nixos.age".publicKeys = forHosts [optiplex-nixos];
   "secrets/rustdesk-optiplex-nixos.age".publicKeys = forHosts [optiplex-nixos];
   "secrets/rustdesk-key-optiplex-nixos.age".publicKeys = forHosts [optiplex-nixos];
 
