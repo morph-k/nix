@@ -44,6 +44,10 @@
     # Archive
     p7zip
 
+    # Nix tooling
+    nix-index # `nix-locate` a file -> the package providing it
+    comma # `, <cmd>` runs a program without installing it (needs nix-index's db)
+
     # Other utilities
     tealdeer
     ranger

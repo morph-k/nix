@@ -26,7 +26,6 @@
       "buzz"
       "deskflow"
       "flameshot"
-      "font-fira-code-nerd-font"
       "free-gpgmail"
       "gcloud-cli"
       "ghostty"

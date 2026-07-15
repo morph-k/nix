@@ -1,91 +1,69 @@
 {
   config,
   pkgs,
-  libs,
   ...
 }: let
   # defaults write org.hammerspoon.Hammerspoon MJConfigFile ~/.config/hammerspoon/init.lua
   hammerspoonPath = "${config.xdg.configHome}/hammerspoon";
+
+  # Spoons are plain Lua directories, so we can link them straight from the
+  # store. Previously these were `git clone`d in an activation script guarded
+  # by `if [ ! -d ... ]`, which meant they were fetched once and then never
+  # updated, and each host could end up on a different commit. Pinning the rev
+  # keeps every host on the same code; bump rev + hash to update.
+  spoons = {
+    PaperWM = {
+      owner = "mogenson";
+      rev = "34787bf38ce429a84f94ae00a73418e32cc1abb8";
+      hash = "sha256-hffz5Ae/INkYXRgZVX4FNejCbqC1l1aTigFRDFe8cYM=";
+    };
+    ActiveSpace = {
+      owner = "mogenson";
+      rev = "2c250f4aa8f8ebe3fe226335c5a5da74274f1793";
+      hash = "sha256-x5AqQTS+c0Er6ZExhaN6SRwqO+GYJ5HXkzOJnZfCcSE=";
+    };
+    WarpMouse = {
+      owner = "mogenson";
+      rev = "e231f2a9079e303771bcc22e88e7494bbca37b07";
+      hash = "sha256-moMnXaW7M/GxQvYXBc9eCvZD6mwRP+mxx6YU8fLBPVE=";
+    };
+    Swipe = {
+      owner = "mogenson";
+      rev = "c56520507d98e663ae0e1228e41cac690557d4aa";
+      hash = "sha256-G0kuCrG6lz4R+LdAqNWiMXneF09pLI+xKCiagryBb5k=";
+    };
+    FocusMode = {
+      owner = "selimacerbas";
+      rev = "a37361fac8c5bd38d427ba2d9d53e6c4abb56183";
+      hash = "sha256-+KP8o+DMfj9s7YPu0gzbpJMXS8rE+w7UnaFSosF7Aks=";
+    };
+  };
+
+  mkSpoonFile = name: {
+    owner,
+    rev,
+    hash,
+  }: {
+    name = "${hammerspoonPath}/Spoons/${name}.spoon";
+    value.source = pkgs.fetchFromGitHub {
+      inherit owner rev hash;
+      repo = "${name}.spoon";
+    };
+  };
 in {
-  # Note: Hammerspoon must be installed manually or via Homebrew
-  # brew install --cask hammerspoon
+  # Note: Hammerspoon itself is not installed by either Darwin host; install it
+  # manually or add a `hammerspoon` cask. This module only manages its config.
 
-  home.file."${hammerspoonPath}/Spoons/SpoonInstall.spoon/init.lua".source = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/Hammerspoon/Spoons/master/Source/SpoonInstall.spoon/init.lua";
-    sha256 = "0bm2cl3xa8rijmj6biq5dx4flr2arfn7j13qxbfi843a8dwpyhvk";
-  };
+  home.file =
+    builtins.listToAttrs (
+      builtins.attrValues (builtins.mapAttrs mkSpoonFile spoons)
+    )
+    // {
+      "${hammerspoonPath}/Spoons/SpoonInstall.spoon/init.lua".source = builtins.fetchurl {
+        url = "https://raw.githubusercontent.com/Hammerspoon/Spoons/master/Source/SpoonInstall.spoon/init.lua";
+        sha256 = "0bm2cl3xa8rijmj6biq5dx4flr2arfn7j13qxbfi843a8dwpyhvk";
+      };
 
-  # Install additional Spoons via activation scripts
-  home.activation = {
-    # PaperWM.spoon - tiling window manager
-    installPaperWM = {
-      after = [];
-      before = ["checkLinkTargets"];
-      data = ''
-        if [ ! -d "${hammerspoonPath}/Spoons/PaperWM.spoon" ]; then
-          echo "Installing PaperWM.spoon..."
-          ${pkgs.git}/bin/git clone https://github.com/mogenson/PaperWM.spoon "${hammerspoonPath}/Spoons/PaperWM.spoon"
-        else
-          echo "PaperWM.spoon already installed"
-        fi
-      '';
+      "${hammerspoonPath}/init.lua".source = ./hammerspoon/init.lua;
     };
-
-    # ActiveSpace.spoon - Show active and layout of Mission Control spaces in the menu bar
-    installActiveSpace = {
-      after = [];
-      before = ["checkLinkTargets"];
-      data = ''
-        if [ ! -d "${hammerspoonPath}/Spoons/ActiveSpace.spoon" ]; then
-          echo "Installing ActiveSpace.spoon..."
-          ${pkgs.git}/bin/git clone https://github.com/mogenson/ActiveSpace.spoon "${hammerspoonPath}/Spoons/ActiveSpace.spoon"
-        else
-          echo "ActiveSpace.spoon already installed"
-        fi
-      '';
-    };
-
-    # WarpMouse.spoon - Move mouse cursor between screen edges to simulate side-by-side screens
-    installWarpMouse = {
-      after = [];
-      before = ["checkLinkTargets"];
-      data = ''
-        if [ ! -d "${hammerspoonPath}/Spoons/WarpMouse.spoon" ]; then
-          echo "Installing WarpMouse.spoon..."
-          ${pkgs.git}/bin/git clone https://github.com/mogenson/WarpMouse.spoon "${hammerspoonPath}/Spoons/WarpMouse.spoon"
-        else
-          echo "WarpMouse.spoon already installed"
-        fi
-      '';
-    };
-
-    # Swipe.spoon - Perform actions when trackpad swipe gestures are recognized
-    installSwipe = {
-      after = [];
-      before = ["checkLinkTargets"];
-      data = ''
-        if [ ! -d "${hammerspoonPath}/Spoons/Swipe.spoon" ]; then
-          echo "Installing Swipe.spoon..."
-          ${pkgs.git}/bin/git clone https://github.com/mogenson/Swipe.spoon "${hammerspoonPath}/Spoons/Swipe.spoon"
-        else
-          echo "Swipe.spoon already installed"
-        fi
-      '';
-    };
-
-    # FocusMode.spoon - Helps you stay in flow by dimming everything except what you're working on
-    installFocusMode = {
-      after = [];
-      before = ["checkLinkTargets"];
-      data = ''
-        if [ ! -d "${hammerspoonPath}/Spoons/FocusMode.spoon" ]; then
-          echo "Installing FocusMode.spoon..."
-          ${pkgs.git}/bin/git clone https://github.com/selimacerbas/FocusMode.spoon "${hammerspoonPath}/Spoons/FocusMode.spoon"
-        else
-          echo "FocusMode.spoon already installed"
-        fi
-      '';
-    };
-  };
-  home.file."${hammerspoonPath}/init.lua".source = ./hammerspoon/init.lua;
 }

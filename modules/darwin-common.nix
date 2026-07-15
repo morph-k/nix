@@ -31,6 +31,14 @@
     hostName = hostName;
   };
 
+  # FiraCode is what dots/ghostty/.config/ghostty/config asks for; JetBrainsMono
+  # is what dots/fontconfig expects. Installed here rather than as a cask so
+  # both Darwin hosts get them (mbp previously had neither).
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
+  ];
+
   environment = {
     shells = with pkgs; [zsh];
     variables = {

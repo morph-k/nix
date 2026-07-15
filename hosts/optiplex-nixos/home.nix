@@ -10,7 +10,6 @@
     # ../../modules/i3.nix
     # ../../modules/redshift.nix
     # ../../modules/pass.nix
-    # ../../modules/fonts.nix
     # ../../modules/zathura
     # ../../modules/hyprland
     ../../modules/lf
@@ -101,7 +100,6 @@
       feh
       # sublime  # removed from nixpkgs; sublime4 fails to evaluate (unfree/broken)
       surfraw
-      nix-index
       redshift
       # termite
       # plover
