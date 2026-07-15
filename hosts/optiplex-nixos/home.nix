@@ -1,14 +1,8 @@
 {pkgs, ...}: {
   imports = [
     ../../modules/home-common.nix
-    # ../../modules/i3.nix
-    # ../../modules/redshift.nix
-    # ../../modules/pass.nix
     # ../../modules/zathura
-    # ../../modules/hyprland
     ../../modules/lf
-    # ./modules/nvim.nix
-    # ../../modules/picom.nix
   ];
 
   # services.clipmenu.enable = true;
@@ -96,7 +90,6 @@
       surfraw
       redshift
       # termite
-      # plover
       tree-sitter
       # rnix-lsp
       gopls
