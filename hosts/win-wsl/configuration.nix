@@ -4,7 +4,6 @@
   config,
   nixos-wsl,
   modulesPath,
-  callPackage,
   agenix,
   ...
 }: {
@@ -225,7 +224,6 @@
     rsync
     stow
     binutils
-    eza
     autojump
     atuin
     starship

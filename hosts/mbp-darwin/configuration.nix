@@ -103,8 +103,6 @@
     allowUnsupportedSystem = true;
   };
 
-  nixpkgs.overlays = [];
-
   services.openssh = {
     enable = true;
   };

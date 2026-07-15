@@ -87,8 +87,6 @@
     allowUnsupportedSystem = true;
   };
 
-  nixpkgs.overlays = [];
-
   # Kanata key remapper (cross-platform, migrated from keyd)
   services.kanata-remapper = {
     enable = true;

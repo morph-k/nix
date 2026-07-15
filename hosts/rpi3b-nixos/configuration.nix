@@ -45,7 +45,7 @@
   documentation.nixos.enable = true;
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 30d";
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
 
   # Hardened sshd defaults come from modules/ssh-hardened.nix (imported below).
   services.openssh.enable = true;

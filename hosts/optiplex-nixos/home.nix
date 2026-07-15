@@ -1,6 +1,5 @@
 {
   config,
-  current,
   pkgs,
   lib,
   plover,
