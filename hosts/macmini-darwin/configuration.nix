@@ -13,6 +13,7 @@
     fd
     ripgrep
     duti # sets default app associations (e.g. PDF viewer)
+    cachix # push/pull the jedimaster binary cache (see `make push-cachix`)
   ];
 
   homebrew = {
@@ -50,9 +51,15 @@
       experimental-features = nix-command flakes
       gc-keep-outputs = true
       gc-keep-derivations = true
+      extra-substituters = https://jedimaster.cachix.org https://nix-community.cachix.org
+      extra-trusted-public-keys = jedimaster.cachix.org-1:d3z8VEyrrqcYEe/9wOhIa6iXb4ArWUoQLB5tz1b+CZA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
     '';
     enable = false;
   };
+
+  # Cachix auth token for pushing to the jedimaster cache (used by
+  # `make push-cachix`, which decrypts it via agenix).
+  age.secrets.cachix-token.file = ../../secrets/cachix-token.age;
 
   # Finder configuration activation script
   system.activationScripts.postActivation.text = ''

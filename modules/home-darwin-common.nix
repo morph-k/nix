@@ -88,6 +88,23 @@ in {
           org-roam
           org-roam-ui
           org-msg
+          org-transclusion
+          # md-roam adds Markdown support to org-roam (indexes exported Apple
+          # Notes .md files as roam nodes). It is not on MELPA / in nixpkgs, so
+          # build it from source. To bump: change rev, then run
+          #   nix store prefetch-file --unpack https://github.com/nobiot/md-roam/archive/<rev>.tar.gz
+          # and paste the reported hash below.
+          (epkgs.trivialBuild {
+            pname = "md-roam";
+            version = "20250419.1521";
+            src = pkgs.fetchFromGitHub {
+              owner = "nobiot";
+              repo = "md-roam";
+              rev = "1113a568138c1e1084a3cd41a04a9cff2ff14a72";
+              hash = "sha256-YxkL6vqabh2qkmgH2zUNFhUoQBQ07sjj9bFdFrWGlf0=";
+            };
+            packageRequires = with epkgs; [org-roam markdown-mode];
+          })
 
           # Terminal
           vterm
