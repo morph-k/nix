@@ -20,6 +20,11 @@
     taps = [
       "deskflow/tap" # deskflow is not in homebrew/cask; trusted in home-darwin-common.nix
     ];
+    brews = [
+      # Generates buildServer.json so sourcekit-lsp can resolve imports in an
+      # .xcodeproj/.xcworkspace. Not packaged in nixpkgs.
+      "xcode-build-server"
+    ];
     # GUI apps that require homebrew casks
     casks = [
       "raycast"
