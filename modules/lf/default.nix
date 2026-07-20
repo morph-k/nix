@@ -194,8 +194,11 @@ in {
         y=$5
 
         if [[ "$( ${pkgs.file}/bin/file -Lb --mime-type "$file")" =~ ^image ]]; then
-            # ghostty speaks the kitty graphics protocol; chafa emits it (no kitten icat CLI in ghostty)
-            ${pkgs.chafa}/bin/chafa -f kitty --polite on -s "''${w}x''${h}" "$file" < /dev/null > /dev/tty
+            # ghostty speaks the kitty graphics protocol; chafa emits it (no kitten icat CLI in ghostty).
+            # Inside tmux the escapes must be wrapped for passthrough (and tmux
+            # needs `set -g allow-passthrough on`); outside, emit them directly.
+            if [ -n "$TMUX" ]; then pt=tmux; else pt=none; fi
+            ${pkgs.chafa}/bin/chafa -f kitty --passthrough "$pt" --polite on -s "''${w}x''${h}" "$file" < /dev/null > /dev/tty
             exit 1
         fi
 
