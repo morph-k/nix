@@ -126,6 +126,31 @@
     packages.aarch64-linux.rpi3b-sdcard =
       self.nixosConfigurations.rpi3b-nixos.config.system.build.sdImage;
 
+    # Bootable disk image for the UTM builder VM.
+    #
+    # Raw rather than qcow2 so UTM's Apple Virtualization backend can boot it
+    # directly; the file is sparse, so the nominal 40G costs far less on disk.
+    #
+    # This cannot be built from Darwin — the host has no Linux builder, which
+    # is the entire reason this VM exists. Build it on an aarch64-linux machine
+    # or inside an aarch64-linux container.
+    packages.aarch64-linux.utm-builder-image = import "${nixpkgs}/nixos/lib/make-disk-image.nix" {
+      inherit (nixpkgs) lib;
+      pkgs = nixpkgs.legacyPackages.aarch64-linux;
+      config = self.nixosConfigurations.utm-builder.config;
+      format = "raw";
+      partitionTableType = "efi";
+      installBootLoader = true;
+      touchEFIVars = false;
+      diskSize = 40 * 1024;
+      copyChannel = false;
+    };
+
+    # Installer ISO with the builder's SSH key baked in. Unlike the disk image
+    # above, this needs no VM and no kvm, so it builds fine inside a container.
+    packages.aarch64-linux.utm-installer-iso =
+      self.nixosConfigurations.utm-installer.config.system.build.isoImage;
+
     # ── Darwin hosts ────────────────────────────────────────────────────────
     darwinConfigurations.macmini-darwin = import ./hosts/macmini-darwin hostArgs;
     darwinConfigurations.mbp-darwin = import ./hosts/mbp-darwin hostArgs;
@@ -133,6 +158,20 @@
     # ── NixOS hosts ─────────────────────────────────────────────────────────
     nixosConfigurations.optiplex-nixos = import ./hosts/optiplex-nixos hostArgs;
     nixosConfigurations.win-wsl = import ./hosts/win-wsl hostArgs;
+
+    # utm-builder: small aarch64-linux VM run under UTM, used as a Nix remote
+    # builder so the Darwin hosts can realise Linux derivations natively.
+    nixosConfigurations.utm-builder = nixpkgs.lib.nixosSystem {
+      system = "aarch64-linux";
+      modules = [./modules/utm-builder.nix];
+    };
+
+    # Installer ISO for the above, with an SSH key baked in so the install can
+    # be driven over the network instead of through the VM's console.
+    nixosConfigurations.utm-installer = nixpkgs.lib.nixosSystem {
+      system = "aarch64-linux";
+      modules = [./modules/utm-installer.nix];
+    };
 
     # riscv-vm NixOS
     nixosConfigurations.riscv-vm = nixpkgs.lib.nixosSystem {
