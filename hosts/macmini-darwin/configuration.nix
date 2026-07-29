@@ -12,6 +12,7 @@
     git
     fd
     ripgrep
+    # vorta
     duti # sets default app associations (e.g. PDF viewer)
     cachix # push/pull the jedimaster binary cache (see `make push-cachix`)
   ];
@@ -45,7 +46,7 @@
       "qmk-toolbox"
       "raspberry-pi-imager"
       "utm"
-      "vlc"
+      # "vlc"
     ];
   };
 

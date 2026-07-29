@@ -179,9 +179,8 @@ in {
       nodejs
 
       # Python tools
-      pipx
-      poetry
       uv
+      # uvr
 
       # System monitoring
       btop
