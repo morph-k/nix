@@ -68,7 +68,7 @@ push-cachix: .build-stamp
 	CACHIX_AUTH_TOKEN=$$(agenix -d secrets/cachix-token.age 2>/dev/null) cachix push jedimaster ./result
 
 update:
-	sudo nix flake update
+	nix flake update
 
 fmt:
 	alejandra .
