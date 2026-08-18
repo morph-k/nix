@@ -53,4 +53,24 @@
     ranger
     stylua
   ];
+
+  programs = {
+    # direnv: per-directory environments (https://github.com/direnv/direnv).
+    # nix-direnv replaces direnv's stock `use nix`/`use flake` with a version
+    # that caches the evaluated environment and registers it as a GC root, so
+    # entering a project is instant instead of re-evaluating the flake. It
+    # relies on gc-keep-outputs/gc-keep-derivations, which the Darwin hosts
+    # already set in configuration.nix.
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+
+      # Same convention as mcfly in home-darwin-common.nix: zsh is not a
+      # home-manager program on these hosts (~/.zshrc is stowed from ~/dots),
+      # so home-manager has no initExtra to write the hook into. The
+      # `direnv hook zsh` line lives in the stowed ~/.zshrc instead.
+      enableZshIntegration = false;
+      enableBashIntegration = false;
+    };
+  };
 }
