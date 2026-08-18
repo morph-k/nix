@@ -49,7 +49,24 @@
   };
 
   programs = {
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+
+      # nix-darwin's generated /etc/zshrc runs an *uncached* `compinit`
+      # (no -C, no -d), plus bashcompinit and a `prompt suse` promptinit.
+      # All three are wasted here and cost ~45ms of every interactive shell:
+      #   - ~/.zshrc (stowed from ~/dots) already runs compinit against a
+      #     cached, byte-compiled dump under $XDG_CACHE_HOME/zsh, so the
+      #     /etc one is a second and slower init of the same thing.
+      #   - starship owns the prompt, so `prompt suse` is overwritten
+      #     microseconds after it is set.
+      # Completion still works fully -- it is just initialised once, from
+      # the cache, instead of twice.
+      enableCompletion = false;
+      enableBashCompletion = false;
+      enableGlobalCompInit = false;
+      promptInit = "";
+    };
   };
 
   homebrew = {
