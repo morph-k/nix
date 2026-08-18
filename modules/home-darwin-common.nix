@@ -155,27 +155,19 @@ in {
 
       # Archive/compression
       xz
-      zstd
 
       # File tools
-      tree
       rename
       fswatch
 
       # Text/document processing
-      gum
 
       # Development tools
       coreutils
       cmake
-      meson
-      ninja
-      gnused
-      moreutils
 
       # Languages & runtimes
       lua
-      luarocks
       nodejs
 
       # Python tools
@@ -183,19 +175,14 @@ in {
       # uvr
 
       # System monitoring
-      btop
 
       # Media & documents
       ffmpeg
-      imagemagick
-      mupdf
 
       # Network & communication
       wget
 
       # Email tools
-      notmuch
-      msmtp
 
       # Security & encryption
       age
