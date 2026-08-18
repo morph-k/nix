@@ -125,6 +125,7 @@
       };
       x86_64-linux = {
         formatting = fmtCheck "x86_64-linux";
+        eval-omarchy = evalCheck "x86_64-linux" "omarchy" self.nixosConfigurations.omarchy-linux.config.system.build.toplevel.drvPath;
         eval-optiplex = evalCheck "x86_64-linux" "optiplex" self.nixosConfigurations.optiplex-nixos.config.system.build.toplevel.drvPath;
         eval-win-wsl = evalCheck "x86_64-linux" "win-wsl" self.nixosConfigurations.win-wsl.config.system.build.toplevel.drvPath;
         # rpi3b cross-compiles to aarch64-linux but evaluates from x86_64-linux.
