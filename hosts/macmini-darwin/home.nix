@@ -38,10 +38,8 @@
   # grammar alone is not enough: without the queries, vim.treesitter.start()
   # fails and Swift buffers fall back to regex syntax with no error shown.
   home.file = {
-    ".local/share/nvim/site/parser/swift.so".source =
-      "${pkgs.vimPlugins.nvim-treesitter-parsers.swift}/parser/swift.so";
+    ".local/share/nvim/site/parser/swift.so".source = "${pkgs.vimPlugins.nvim-treesitter-parsers.swift}/parser/swift.so";
 
-    ".local/share/nvim/site/queries/swift".source =
-      "${pkgs.vimPlugins.nvim-treesitter}/runtime/queries/swift";
+    ".local/share/nvim/site/queries/swift".source = "${pkgs.vimPlugins.nvim-treesitter}/runtime/queries/swift";
   };
 }
