@@ -1,7 +1,11 @@
 # Home-manager packages shared across all hosts.
 # Host-specific packages stay in each host's home.nix; anything common to
 # every host lives here so it's declared once (prevents cross-host drift).
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   home.packages = with pkgs; [
     # Shell & navigation
     zsh
@@ -69,8 +73,12 @@
       # home-manager program on these hosts (~/.zshrc is stowed from ~/dots),
       # so home-manager has no initExtra to write the hook into. The
       # `direnv hook zsh` line lives in the stowed ~/.zshrc instead.
-      enableZshIntegration = false;
-      enableBashIntegration = false;
+      # mkDefault, not a plain false: a host whose shell *is* managed by
+      # home-manager (omarchy-linux, via omarchy-nix's zsh module) sets this
+      # to true, and an unprefixed false here would be a conflict rather than
+      # an override.
+      enableZshIntegration = lib.mkDefault false;
+      enableBashIntegration = lib.mkDefault false;
     };
   };
 }

@@ -3,6 +3,7 @@ mkNixos {
   home = ./home.nix;
   modules = [
     ./configuration.nix
+    ../../modules/nix-caches.nix
     ../../modules/tailscale
   ];
   overlays = [

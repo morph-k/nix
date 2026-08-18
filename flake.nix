@@ -42,6 +42,17 @@
       url = "github:morph-k/rawtalk";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Omarchy for NixOS: a reimplementation of DHH's Arch-based Omarchy
+    # (Hyprland desktop, theming, keybinds) as NixOS + home-manager modules.
+    # Upstream is explicitly in maintenance mode -- the author moved back to
+    # Arch Omarchy -- and its README targets nixos-25.05, while this flake
+    # tracks unstable. Pinning it here means a breaking nixpkgs change shows
+    # up as an eval failure in `nix flake check` rather than at rebuild time.
+    omarchy-nix = {
+      url = "github:henrysipp/omarchy-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
   outputs = {
@@ -156,6 +167,7 @@
     darwinConfigurations.mbp-darwin = import ./hosts/mbp-darwin hostArgs;
 
     # ── NixOS hosts ─────────────────────────────────────────────────────────
+    nixosConfigurations.omarchy-linux = import ./hosts/omarchy-linux hostArgs;
     nixosConfigurations.optiplex-nixos = import ./hosts/optiplex-nixos hostArgs;
     nixosConfigurations.win-wsl = import ./hosts/win-wsl hostArgs;
 

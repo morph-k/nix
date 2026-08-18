@@ -11,6 +11,7 @@ inputs.nixpkgs.lib.nixosSystem {
   specialArgs = inputs // {inherit user;};
   modules = [
     ./configuration.nix
+    ../../modules/nix-caches.nix
     inputs.nixos-wsl.nixosModules.wsl
     ({pkgs, ...}: {
       environment.systemPackages = [pkgs.alejandra];
