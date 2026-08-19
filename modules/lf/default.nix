@@ -192,21 +192,66 @@ in {
         h=$3
         x=$4
         y=$5
+        mode=$6
 
         if [[ "$( ${pkgs.file}/bin/file -Lb --mime-type "$file")" =~ ^image ]]; then
-            # ghostty speaks the kitty graphics protocol; chafa emits it (no kitten icat CLI in ghostty).
-            # Inside tmux the escapes must be wrapped for passthrough (and tmux
-            # needs `set -g allow-passthrough on`); outside, emit them directly.
+            # With `preload` enabled lf also runs this for files that are not
+            # on screen; drawing then would splatter images over the UI.
+            [ "$mode" = preload ] && exit 1
+
+            # ghostty speaks the kitty graphics protocol; chafa emits it (no
+            # kitten icat CLI in ghostty). chafa can only draw at the cursor
+            # and has no --place, so put the cursor on the preview pane
+            # first: lf hands us the pane's 0-based origin in $x/$y, and it
+            # otherwise leaves the real cursor parked in the bottom-right
+            # corner -- which is where the image lands, scrolling the screen
+            # on the way. --relative keeps every later row anchored to that
+            # same column; with it off chafa separates rows with newlines and
+            # the image walks back to column 1 over the file list.
+            # --animate off matters for GIF/WebP: chafa would otherwise loop
+            # frames forever and the previewer would never exit.
+            #
+            # Inside tmux the escapes must be wrapped for passthrough (and
+            # tmux needs `set -g allow-passthrough on`); outside, emit them
+            # directly.
             if [ -n "$TMUX" ]; then pt=tmux; else pt=none; fi
-            ${pkgs.chafa}/bin/chafa -f kitty --passthrough "$pt" --polite on -s "''${w}x''${h}" "$file" < /dev/null > /dev/tty
+            {
+                printf '\033[%d;%dH' "$((y + 1))" "$((x + 1))"
+                ${pkgs.chafa}/bin/chafa -f kitty --passthrough "$pt" \
+                    --polite on --animate off --relative on \
+                    -s "''${w}x''${h}" "$file" < /dev/null
+            } > /dev/tty
             exit 1
         fi
 
         ${pkgs.pistol}/bin/pistol "$file"
       '';
       cleaner = pkgs.writeShellScriptBin "clean.sh" ''
-        # delete all images placed via the kitty graphics protocol
-        printf '\033_Ga=d\033\\' > /dev/tty
+        w=$2
+        h=$3
+        x=$4
+        y=$5
+
+        # Delete every image placed via the kitty graphics protocol. Inside
+        # tmux the APC escape has to travel through tmux's DCS passthrough
+        # (with every ESC doubled) or tmux swallows it and the old image
+        # stays on screen.
+        if [ -n "$TMUX" ]; then
+            printf '\033Ptmux;\033\033_Ga=d,d=A\033\033\\\033\\' > /dev/tty
+
+            # Under tmux chafa draws through Unicode placeholder *cells*.
+            # lf's screen model knows nothing about them, so it never
+            # repaints over them and they linger as garbage glyphs. Blank the
+            # pane ourselves; lf draws the next preview on top afterwards.
+            blank=$(printf "%''${w}s" "")
+            i=0
+            while [ "$i" -lt "$h" ]; do
+                printf '\033[%d;%dH%s' "$((y + i + 1))" "$((x + 1))" "$blank"
+                i=$((i + 1))
+            done > /dev/tty
+        else
+            printf '\033_Ga=d,d=A\033\\' > /dev/tty
+        fi
       '';
     in ''
       set cleaner ${cleaner}/bin/clean.sh
